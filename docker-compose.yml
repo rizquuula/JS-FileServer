@@ -7,6 +7,6 @@ services:
     volumes:
       - ./images:/app/file
     ports:
-      - "8020:3000"
+      - "33033:3000"
     environment:
       - NODE_ENV=production
