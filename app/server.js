@@ -52,8 +52,8 @@ app.use((req, res) => {
 });
 
 // Start server
-app.listen(config.PORT, () => {
-  console.log(`Server running at http://localhost:${config.PORT}`);
+app.listen(config.PORT, '0.0.0.0', () => {
+  console.log(`Server running at http://0.0.0.0:${config.PORT}`);
   console.log(`Upload directory: ${config.UPLOAD_DIR}`);
   console.log(`Static files served at: ${config.STATIC_ROUTE}`);
   console.log(`File TTL: ${config.FILE_TTL_HOURS} hours`);
