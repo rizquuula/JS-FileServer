@@ -70,12 +70,45 @@ function handleBase64Upload(req, res) {
       });
     }
 
+    let base64Data = base64;
+    let mimetype = 'application/octet-stream';
+
+    // Check if it's a data URL (e.g., data:image/png;base64,...)
+    if (base64.startsWith('data:')) {
+      const dataUrlMatch = base64.match(/^data:([^;]+);base64,(.+)$/);
+      if (!dataUrlMatch) {
+        console.log(`[${timestamp}] BASE64 UPLOAD FAILED - ${ip} - Invalid data URL format`);
+        return res.status(400).json({
+          error: 'Invalid data URL',
+          message: 'The provided data URL is not in the correct format'
+        });
+      }
+      mimetype = dataUrlMatch[1]; // Extract MIME type
+      base64Data = dataUrlMatch[2]; // Extract base64 data
+    }
+
     // Decode base64 data
-    const buffer = Buffer.from(base64, 'base64');
+    const buffer = Buffer.from(base64Data, 'base64');
     console.log(`[${timestamp}] BASE64 DECODE - ${ip} - Decoded ${buffer.length} bytes from base64`);
 
+    // Adjust filename extension based on MIME type if no extension provided
+    let adjustedFilename = filename;
+    if (!path.extname(filename)) {
+      const mimeToExt = {
+        'image/png': '.png',
+        'image/jpeg': '.jpg',
+        'image/jpg': '.jpg',
+        'image/gif': '.gif',
+        'image/webp': '.webp',
+        'image/svg+xml': '.svg'
+      };
+      if (mimeToExt[mimetype]) {
+        adjustedFilename += mimeToExt[mimetype];
+      }
+    }
+
     // Generate unique filename
-    const uniqueFilename = generateUniqueFilename(filename);
+    const uniqueFilename = generateUniqueFilename(adjustedFilename);
 
     // Ensure upload directory exists
     ensureDirectoryExists(config.UPLOAD_PATH);
@@ -95,7 +128,7 @@ function handleBase64Upload(req, res) {
       url: `${config.STATIC_ROUTE}/${uniqueFilename}`,
       filename: uniqueFilename,
       size: stats.size,
-      mimetype: 'application/octet-stream' // Could be improved with proper MIME type detection
+      mimetype: mimetype
     });
   } catch (error) {
     console.error(`[${timestamp}] BASE64 UPLOAD ERROR - ${ip} - ${error.message}`);
