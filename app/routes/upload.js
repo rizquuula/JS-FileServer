@@ -6,9 +6,9 @@ const router = express.Router();
 
 /**
  * POST /upload
- * Upload a single image file
+ * Upload a single file
  */
-router.post('/upload', upload.single('image'), (req, res) => {
+router.post('/upload', upload.single('file'), (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({
