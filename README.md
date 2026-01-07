@@ -4,6 +4,8 @@ A simple Node.js file upload server using Express and Multer with CORS enabled f
 
 ## Quick Start
 
+### Development (Local)
+
 1. Install dependencies:
    ```bash
    make install
@@ -15,6 +17,20 @@ A simple Node.js file upload server using Express and Multer with CORS enabled f
    ```
 
 Server will run at `http://localhost:3000`
+
+### Docker
+
+1. Build and run with Docker Compose:
+   ```bash
+   docker compose up --build
+   ```
+
+Server will run at `http://localhost:8020`
+
+To run in background:
+```bash
+docker compose up -d --build
+```
 
 ## API Endpoints
 

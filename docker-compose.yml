@@ -1,14 +1,12 @@
 services:
-  image-service:
-    image: node:18-alpine
+  fileupload-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: fileupload-expressjs
-    working_dir: /app
     volumes:
-      - ./app:/app
-      - ./images:/app/images
+      - ./images:/app/file
     ports:
       - "8020:3000"
-    command: >
-      sh -c "npm install express multer && node index.js"
     environment:
       - NODE_ENV=production
