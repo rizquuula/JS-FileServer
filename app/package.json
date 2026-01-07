@@ -1,4 +1,9 @@
 {
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
   "dependencies": {
     "express": "^5.1.0",
     "multer": "^2.0.2"
