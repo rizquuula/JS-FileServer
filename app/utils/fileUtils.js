@@ -21,14 +21,16 @@ function getFileExtension(filename) {
 }
 
 /**
- * Generates a unique filename with timestamp
+ * Generates a unique filename with original name + UUID
  * @param {string} originalFilename - The original filename
- * @returns {string} A unique filename with timestamp
+ * @returns {string} A unique filename with original name and UUID
  */
 function generateUniqueFilename(originalFilename) {
-  const timestamp = Date.now();
+  const crypto = require('crypto');
+  const uuid = crypto.randomUUID();
+  const nameWithoutExt = originalFilename.replace(/\.[^/.]+$/, ''); // Remove extension
   const extension = getFileExtension(originalFilename);
-  return `${timestamp}${extension}`;
+  return `${nameWithoutExt}-${uuid}${extension}`;
 }
 
 /**

@@ -33,8 +33,8 @@ curl -X POST -F "file=@example.jpg" http://localhost:3000/upload
 {
   "success": true,
   "message": "File uploaded successfully",
-  "url": "/file/1704624567890.jpg",
-  "filename": "1704624567890.jpg",
+  "url": "/file/example-uuid-here.jpg",
+  "filename": "example-uuid-here.jpg",
   "size": 2048576,
   "mimetype": "image/jpeg"
 }
