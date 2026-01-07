@@ -53,8 +53,9 @@ function cleanupExpiredFiles(dirPath, ttlHours) {
 
       // Check if file is older than TTL
       if (now - stats.mtime.getTime() > ttlMs) {
+        const fileAgeHours = (now - stats.mtime.getTime()) / (1000 * 60 * 60);
+        console.log(`[${new Date().toISOString()}] CLEANUP - Removing expired file: ${file} (age: ${fileAgeHours.toFixed(2)} hours)`);
         fs.unlinkSync(filePath);
-        console.log(`Cleaned up expired file: ${file}`);
       }
     });
   } catch (error) {

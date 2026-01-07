@@ -8,8 +8,8 @@ const app = express();
 
 // Middleware
 app.use(cors()); // Enable CORS for all origins
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '50mb' })); // Increased limit for base64 uploads
+app.use(express.urlencoded({ extended: true, limit: '50mb' })); // Increased limit for large form data
 
 // Serve static files from file directory
 app.use(config.STATIC_ROUTE, express.static(config.STATIC_PATH));
@@ -28,18 +28,46 @@ app.get('/health', (req, res) => {
 
 // Error handling middleware
 app.use((error, req, res, next) => {
-  console.error('Unhandled error:', error);
+  // Log detailed error information
+  const timestamp = new Date().toISOString();
+  const method = req.method;
+  const url = req.originalUrl;
+  const ip = req.ip || req.connection.remoteAddress;
 
+  console.error(`[${timestamp}] ERROR - ${method} ${url} - IP: ${ip}`);
+  console.error('Error details:', {
+    name: error.name,
+    message: error.message,
+    code: error.code,
+    stack: error.stack?.split('\n')[0] // First line of stack trace
+  });
+
+  // Handle specific error types
   if (error.code === 'LIMIT_FILE_SIZE') {
     return res.status(413).json({
       error: 'File too large',
-      message: 'File size exceeds the maximum allowed limit'
+      message: `File size exceeds the maximum allowed limit of ${config.FILE_SIZE_LIMIT / (1024 * 1024)}MB`
     });
   }
 
+  if (error.type === 'entity.too.large') {
+    return res.status(413).json({
+      error: 'Request too large',
+      message: 'Request payload exceeds size limit. Try uploading smaller files or use multipart/form-data for large files.'
+    });
+  }
+
+  if (error.name === 'SyntaxError' && error.message.includes('JSON')) {
+    return res.status(400).json({
+      error: 'Invalid JSON',
+      message: 'Request body contains invalid JSON'
+    });
+  }
+
+  // Generic error response
   res.status(500).json({
     error: 'Internal server error',
-    message: 'Something went wrong on the server'
+    message: 'Something went wrong on the server. Check server logs for details.'
   });
 });
 
