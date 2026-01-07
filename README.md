@@ -28,6 +28,18 @@ Server will run at `http://localhost:3000`
 curl -X POST -F "file=@example.jpg" http://localhost:3000/upload
 ```
 
+### Upload Base64
+- **POST** `/upload/base64`
+- **Content-Type**: `application/json`
+- **Body**: `{"base64": "base64-encoded-file-data", "filename": "optional-filename"}`
+
+**Example using curl:**
+```bash
+curl -X POST -H "Content-Type: application/json" \
+  -d '{"base64": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==", "filename": "example.png"}' \
+  http://localhost:3000/upload/base64
+```
+
 **Response:**
 ```json
 {
