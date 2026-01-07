@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: fileupload-expressjs
+    container_name: js-fileserver
     volumes:
       - ./images:/app/file
     ports:
