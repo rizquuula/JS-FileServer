@@ -32,6 +32,11 @@ To run in background:
 docker compose up -d --build
 ```
 
+### Makefile Commands
+
+- `make deploy` - Deploy with Docker (rebuild and force recreate)
+- `make deploy-latest` - Pull latest from git and deploy
+
 ## API Endpoints
 
 ### Upload File
