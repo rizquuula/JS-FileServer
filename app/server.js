@@ -1,6 +1,7 @@
 const express = require('express');
 const config = require('./config');
 const uploadRoutes = require('./routes/upload');
+const { cleanupExpiredFiles } = require('./utils/fileUtils');
 
 const app = express();
 
@@ -53,6 +54,17 @@ app.listen(config.PORT, () => {
   console.log(`Server running at http://localhost:${config.PORT}`);
   console.log(`Upload directory: ${config.UPLOAD_DIR}`);
   console.log(`Static files served at: ${config.STATIC_ROUTE}`);
+  console.log(`File TTL: ${config.FILE_TTL_HOURS} hours`);
+
+  // Cleanup expired files on startup
+  cleanupExpiredFiles(config.UPLOAD_PATH, config.FILE_TTL_HOURS);
+
+  // Set up periodic cleanup
+  const CLEANUP_INTERVAL = config.CLEANUP_INTERVAL_MINUTES * 60 * 1000; // Convert minutes to milliseconds
+  setInterval(() => {
+    console.log(`Running scheduled file cleanup (every ${config.CLEANUP_INTERVAL_MINUTES} minutes)...`);
+    cleanupExpiredFiles(config.UPLOAD_PATH, config.FILE_TTL_HOURS);
+  }, CLEANUP_INTERVAL);
 });
 
 module.exports = app;

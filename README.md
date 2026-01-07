@@ -49,7 +49,19 @@ Returns server status information.
 
 - Upload directory: `file/`
 - File size limit: 10MB
+- File TTL: 24 hours (configurable via `FILE_TTL_HOURS` environment variable)
+- Cleanup interval: 60 minutes (configurable via `CLEANUP_INTERVAL_MINUTES` environment variable)
 - Port: 3000 (configurable via `PORT` environment variable)
+
+## File Cleanup
+
+Uploaded files are automatically deleted after the configured TTL (Time To Live).
+
+**Cleanup Schedule:**
+- **On startup**: Cleans up any expired files immediately when server starts
+- **Periodic**: Runs every N minutes (configurable via `CLEANUP_INTERVAL_MINUTES`, default: 60 minutes)
+
+You can change the TTL by setting the `FILE_TTL_HOURS` environment variable (default: 24 hours).
 
 ## Project Structure
 
