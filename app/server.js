@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files from images directory
+// Serve static files from file directory
 app.use(config.STATIC_ROUTE, express.static(config.STATIC_PATH));
 
 // Routes
