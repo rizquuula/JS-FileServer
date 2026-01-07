@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const config = require('./config');
 const uploadRoutes = require('./routes/upload');
 const { cleanupExpiredFiles } = require('./utils/fileUtils');
@@ -6,6 +7,7 @@ const { cleanupExpiredFiles } = require('./utils/fileUtils');
 const app = express();
 
 // Middleware
+app.use(cors()); // Enable CORS for all origins
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

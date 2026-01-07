@@ -1,6 +1,6 @@
 # File Upload Server
 
-A simple Node.js file upload server using Express and Multer.
+A simple Node.js file upload server using Express and Multer with CORS enabled for web applications.
 
 ## Quick Start
 
